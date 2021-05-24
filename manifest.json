@@ -1,6 +1,6 @@
 {
   "name": "Clean Tiktok URLs",
-  "short_name": "clean_tik_tok",
+  "short_name": "Clean Tiktok",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#EEE",
