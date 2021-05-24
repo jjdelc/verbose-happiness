@@ -1,0 +1,27 @@
+{
+  "name": "Clean Tiktok URLs",
+  "short_name": "clean_tik_tok",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#EEE",
+  "theme_color": "#EEE",
+  "icons": [
+    {
+      "src": "/favicon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/favicon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "share_target": {
+    "action": "/",
+    "method": "GET",
+    "params": {
+      "url": "url"
+    }
+}
+}

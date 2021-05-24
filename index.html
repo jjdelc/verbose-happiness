@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+	<link rel="manifest" href="/manifest.json">
+    <link rel="icon" href="/favicon-192.png">
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1" />
+    <meta name="theme-color" content="#EEE"/>
+    <style>
+    html,body{margin:0;padding:0;font-family:'Verdana', 'Arial', sans-serif}
+    .target {
+      display: block;
+      margin: 0 auto;
+      width: 90%;
+      max-width: 50rem;
+      background: #EEE;
+      padding: 1rem 0.5rem;
+      font-size: 0.8rem;
+      text-align: center;
+    }
+    .credits a {font-size:0.65rem;color:lightgray;text-decoration:none}
+    </style>
+</head>
+<body>
+  <a class="target" href="" id="shareTarget"></a>
+<script>
+const RESOLVER = new URL("https://k6pv9h413b.execute-api.us-east-1.amazonaws.com/");
+const mainUrl = new URL(document.location);
+const shareUrl = mainUrl.searchParams.get("url");
+const shareTarget = document.getElementById("shareTarget");
+
+async function getRealUrl(url) {
+    RESOLVER.search = new URLSearchParams({
+      url: url
+    })
+    const response = await fetch(RESOLVER);
+    return response.json();
+}
+
+function reShare(url) {
+  shareTarget.href = url;
+  shareTarget.innerHTML = url;
+  if (navigator.share) {
+    navigator.share({
+        title: "Watch this TikTok",
+        url: url
+    });
+  }
+}
+
+getRealUrl(shareUrl).then(reShare);
+
+</script>
+<p class="credits"><a href="https://github.com/jjdelc/">Source</a></p>
+</body>
+</html>
