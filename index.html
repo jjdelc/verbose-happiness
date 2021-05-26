@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-	<link rel="manifest" href="/manifest.json">
+	<link rel="manifest" href="/manifest.json?v=1">
     <link rel="icon" href="/favicon-192.png">
     <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1" />
     <meta name="theme-color" content="#EEE"/>
@@ -29,35 +29,43 @@
       margin: 0 auto;
     }
     #manual {
-      display: none;
       margin: 0 auto;
       width: 90%;
       max-width: 50rem;
+      padding-top: 1rem;
+      display: flex;
     }
     #manual input {
-        font-size: 1.2rem;
+      font-size: 1.2rem;
+      padding: 0.15rem;
+    }
+    #manualUrl {
+      flex: 1;
     }
     </style>
 </head>
 <body>
+<form id="manual">
+    <input type="url" id="manualUrl" name="url" placeholder="https://vm.tiktok.com/..." required/>
+    <input type="submit" value="📲"/>
+</form>
 <p>
   <a class="target" href="./" id="shareTarget">...</a>
   <button id="install">Install</button>
 </p>
-<form id="manual">
-    <input type="url" name="url" placeholder="https://vm.tiktok.com/..." required/>
-    <input type="submit" value="📲"/>
-</form>
 <script>
 const RESOLVER = new URL("https://k6pv9h413b.execute-api.us-east-1.amazonaws.com/");
 const shareTarget = document.getElementById("shareTarget");
 const installButton = document.getElementById("install");
 const manual = document.getElementById("manual");
+const manualUrl = document.getElementById("manualUrl");
 
 const mainUrl = new URL(document.location);
 const shareUrl = mainUrl.searchParams.get("url");
 
 async function getRealUrl(url) {
+    shareTarget.href = "";
+    shareTarget.innerHTML = "Resolving...";
     RESOLVER.search = new URLSearchParams({
       url: url
     })
@@ -77,17 +85,16 @@ function reShare(url) {
 }
 
 if (!!shareUrl) {
-  getRealUrl(shareUrl).then(reShare);
-} else {
-  manual.style.display = "block";
+  manualUrl.value = shareUrl;
+  discover(manual);
 }
 
-manual.addEventListener("submit", (e) => {
-  const data = new FormData(manual);
+function discover(form) {
+  const data = new FormData(form);
   const url = data.get("url");
-  getRealUrl(shareUrl).then(reShare);
-  e.preventDefault();
-});
+  getRealUrl(url).then(reShare);
+}
+
 
 let deferredPrompt;
 window.addEventListener("beforeinstallprompt", (e) => {
