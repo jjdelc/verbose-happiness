@@ -18,10 +18,12 @@
     }
   ],
   "share_target": {
-    "action": "./",
+    "action": "/",
     "method": "GET",
     "params": {
+      "text": "text",
+      "title": "title",
       "url": "url"
     }
-}
+  }
 }
