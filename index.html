@@ -10,16 +10,19 @@
     html,body{margin:0;padding:0;font-family:'Verdana', 'Arial', sans-serif}
     .target {
       display: block;
-      margin: 0 auto;
+      margin: 1rem auto;
       width: 90%;
       max-width: 50rem;
-      background: #EEE;
+      background: #FAFAFA;
+      border: 1px solid #EEE;
       padding: 1rem 0.5rem;
       font-size: 0.8rem;
       text-align: center;
     }
+    .target a {
+    }
     .credits a {font-size:0.65rem;color:lightgray;text-decoration:none}
-    button {
+    #install {
       background: #4A4;
       color: white;
       padding: 0.25rem 1rem;
@@ -35,7 +38,7 @@
       padding-top: 1rem;
       display: flex;
     }
-    #manual input {
+    #manual input, #share {
       font-size: 1.2rem;
       padding: 0.15rem;
     }
@@ -49,16 +52,18 @@
     <input type="url" id="manualUrl" name="url" placeholder="https://vm.tiktok.com/..." required/>
     <input type="submit" value="📲"/>
 </form>
-<p>
-  <a class="target" href="./" id="shareTarget">...</a>
-  <button id="install">Install</button>
+<p class="target">
+  <a href="./" id="shareTarget">...</a>
+  <button id="share" style="display: none">➦</button>
 </p>
+<button id="install">Install</button>
 <script>
 const RESOLVER = new URL("https://k6pv9h413b.execute-api.us-east-1.amazonaws.com/");
 const shareTarget = document.getElementById("shareTarget");
 const installButton = document.getElementById("install");
 const manual = document.getElementById("manual");
 const manualUrl = document.getElementById("manualUrl");
+const share = document.getElementById("share");
 
 const mainUrl = new URL(document.location);
 const shareUrl = mainUrl.searchParams.get("url");
@@ -66,6 +71,7 @@ const shareUrl = mainUrl.searchParams.get("url");
 async function getRealUrl(url) {
     shareTarget.href = "";
     shareTarget.innerHTML = "Resolving...";
+      share.style.display = "none";
     RESOLVER.search = new URLSearchParams({
       url: url
     })
@@ -77,6 +83,7 @@ function reShare(url) {
   shareTarget.href = url;
   shareTarget.innerHTML = url;
   if (navigator.share) {
+    share.style.display = "inline-block";
     navigator.share({
         title: "Watch this TikTok",
         url: url
@@ -94,6 +101,14 @@ function discover(form) {
   const url = data.get("url");
   getRealUrl(url).then(reShare);
 }
+
+share.addEventListener("click", (e) => {
+    const url = shareTarget.href;
+    navigator.share({
+        title: "Watch this TikTok",
+        url: url
+    });
+});
 
 
 let deferredPrompt;
@@ -127,3 +142,4 @@ window.addEventListener('load', function() {
 <p class="credits"><a href="https://github.com/jjdelc/verbose-happiness">Source</a></p>
 </body>
 </html>
+
