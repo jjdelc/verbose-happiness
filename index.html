@@ -64,7 +64,6 @@ const installButton = document.getElementById("install");
 const manual = document.getElementById("manual");
 const manualUrl = document.getElementById("manualUrl");
 const share = document.getElementById("share");
-
 const mainUrl = new URL(document.location);
 const shareUrl = mainUrl.searchParams.get("url");
 
@@ -88,12 +87,9 @@ function reShare(url) {
         title: "Watch this TikTok",
         url: url
     });
+  } else {
+    console.log("Browser does not support share API");
   }
-}
-
-if (!!shareUrl) {
-  manualUrl.value = shareUrl;
-  discover(manual);
 }
 
 function discover(form) {
@@ -101,6 +97,17 @@ function discover(form) {
   const url = data.get("url");
   getRealUrl(url).then(reShare);
 }
+
+(function(){
+    if (!!shareUrl) {
+      console.log(shareUrl);
+      manualUrl.value = shareUrl;
+      discover(manual);
+    } else {
+      console.log("Started without URL");
+    }
+})();
+
 
 share.addEventListener("click", (e) => {
     const url = shareTarget.href;
